@@ -184,33 +184,73 @@ MelodyClaw 是一个完整的歌声克隆系统，核心功能是将任意歌曲
 ```
 melodyclaw/
 ├── README.md                   # 项目文档
+├── TECHNICAL.md               # 技术方案
 ├── requirements.txt            # Python 依赖
 ├── config/
 │   └── config.yaml            # 配置文件
-├── models/
-│   ├── demucs/                # 人声分离模型
-│   ├── rvc/                   # RVC 模型
-│   └── whisper/               # Whisper 模型
-├── src/
-│   ├── __init__.py
+├── models/                    # 模型目录
+│   ├── demucs/
+│   ├── rvc/
+│   └── whisper/
+├── src/                       # 后端核心代码
 │   ├── separator.py           # 人声分离模块
-│   ├── segmenter.py           # 人声分句模块
+│   ├── segmenter.py           # 分句切片模块
 │   ├── converter.py           # 音色克隆模块
 │   ├── mixer.py               # 音频合成模块
 │   └── utils.py               # 工具函数
-├── scripts/
+├── frontend/                  # 前端界面
+│   ├── public/
+│   │   ├── index.html         # 主页面
+│   │   ├── styles.css         # 响应式样式
+│   │   ├── main.js            # 交互逻辑
+│   │   └── example.lrc        # 示例歌词
+│   ├── package.json
+│   └── README.md
+├── scripts/                   # 脚本
 │   ├── download_models.py     # 模型下载脚本
 │   └── train_rvc.py          # RVC 训练脚本
-├── examples/
-│   ├── input/                 # 示例输入
-│   └── output/                # 示例输出
-└── docs/
+├── examples/                  # 示例
+│   ├── input/
+│   └── output/
+└── docs/                      # 文档
     ├── API.md                 # API 文档
     ├── TRAINING.md            # 训练指南
     └── FAQ.md                 # 常见问题
 ```
 
-## 🚀 快速开始
+## 🖥️ 前端界面
+
+MelodyClaw 提供了一个响应式前端界面，展示小龙虾动画和滚动歌词。
+
+### 功能特性
+
+- 🦞 **小龙虾动画** - 根据歌词/节奏做出反应，唱歌时钳子摆动
+- 📜 **歌词滚动** - 龙虾上方滚动显示，当前歌词高亮放大
+- 📱 **响应式设计** - 自动适配手机和电脑端
+- 🎵 **音频控制** - 播放、暂停、进度条、音量控制
+- ⌨️ **键盘快捷键** - 空格播放/暂停，方向键控制
+
+### 快速启动
+
+```bash
+cd frontend
+npm install
+npm start
+# 访问 http://localhost:8080
+```
+
+### 使用流程
+
+1. 上传歌曲音频文件 (MP3/WAV)
+2. 上传 LRC 格式歌词文件
+3. (可选) 上传克隆后的歌曲进行对比
+4. 点击播放，观看小龙虾唱歌
+
+详细文档: [frontend/README.md](frontend/README.md)
+
+---
+
+## 🚀 快速开始（后端）
 
 ### 1. 安装依赖
 
