@@ -1,0 +1,39 @@
+# MelodyClaw Configuration
+
+# 人声分离配置
+separator:
+  model: htdemucs           # demucs 模型: htdemucs, htdemucs_ft, mdx_extra
+  device: cuda              # cuda / cpu / mps (Mac)
+  output_format: wav         # 输出格式: wav, mp3, flac
+  sample_rate: 44100        # 采样率
+
+# 分句切片配置
+segmenter:
+  vad_model: silero         # VAD 模型: silero, webrtc
+  min_silence_ms: 300       # 最小静音时长（毫秒）
+  min_speech_ms: 500        # 最小语音时长（毫秒）
+  padding_ms: 50            # 切片前后填充
+  use_lyrics_alignment: true # 是否使用歌词对齐
+
+# 音色克隆配置
+converter:
+  model: rvc_v2             # 音色克隆模型: rvc_v2, so_vits, openvoice
+  pitch_detection: rmvpe    # 音高检测: rmvpe, crepe, pm, harvest
+  f0_method: pm             # F0 提取方法
+  filter_radius: 3          # 过滤半径
+  rms_mix_rate: 0.25        # RMS 混合比例
+  protect_voiceless: 0.33   # 清音保护阈值
+  output_sr: 44100          # 输出采样率
+
+# 音频合成配置
+mixer:
+  output_format: mp3        # 输出格式: mp3, wav, flac
+  bitrate: 320k             # MP3 比特率
+  normalize: true           # 是否归一化音量
+  add_reverb: false         # 是否添加混响
+  reverb_room: 0.5          # 混响房间大小
+
+# 日志配置
+logging:
+  level: INFO               # DEBUG, INFO, WARNING, ERROR
+  file: logs/melodyclaw.log
