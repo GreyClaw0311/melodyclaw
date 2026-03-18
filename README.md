@@ -1,10 +1,10 @@
 # MelodyClaw - 歌声克隆系统
 
-> 让 AI 用指定音色演唱任意歌曲
+> 需求设计文档
 
 ## 📋 项目概述
 
-MelodyClaw 是一个完整的歌声克隆系统，**专为无GPU服务器设计**，所有 AI 推理通过外部 API 实现。
+MelodyClaw 是一个歌声克隆系统，**专为无GPU服务器设计**，所有 AI 推理通过外部 API 实现。
 
 ### 核心特性
 
@@ -44,90 +44,6 @@ MelodyClaw 是一个完整的歌声克隆系统，**专为无GPU服务器设计*
 | 音频切片/混合 | 本地 CPU (pydub) | 免费 |
 | 人声分离 | 外部 API (HuggingFace) | 免费 |
 | 音色克隆 | 外部 API (Replicate RVC) | $0.0002/秒 |
-
----
-
-## 📁 项目结构
-
-```
-melodyclaw/
-├── backend/               # 后端代码
-│   ├── app/
-│   │   ├── main.py       # FastAPI 入口
-│   │   ├── api/          # API 路由
-│   │   ├── services/     # 业务逻辑
-│   │   └── worker.py     # Celery 任务
-│   └── requirements.txt
-│
-├── frontend/              # 前端代码
-│   ├── src/
-│   │   ├── views/        # 页面组件
-│   │   ├── components/   # 公共组件
-│   │   └── api/          # API 封装
-│   └── package.json
-│
-├── docs/                  # 详细文档
-│   ├── QUICKSTART.md     # 快速开始 ⭐
-│   ├── ARCHITECTURE.md   # 架构设计
-│   ├── FRONTEND.md       # 前端设计
-│   ├── BACKEND.md        # 后端 API
-│   └── TECH_STACK.md     # 技术选型
-│
-└── docker-compose.yml     # Docker 部署
-```
-
----
-
-## 🚀 快速开始
-
-### 方式 1: Docker 部署（推荐）
-
-```bash
-# 1. 克隆代码
-git clone https://github.com/GreyClaw0311/melodyclaw.git
-cd melodyclaw
-
-# 2. 配置 API Key
-cp .env.example .env
-# 编辑 .env，填入 REPLICATE_API_KEY
-
-# 3. 启动服务
-docker-compose up -d
-
-# 4. 访问应用
-# http://localhost:80
-```
-
-### 方式 2: 手动部署
-
-```bash
-# 后端
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app &
-
-# Celery Worker
-celery -A app.worker worker &
-
-# 前端
-cd ../frontend
-npm install && npm run build
-npm run preview
-```
-
-详细步骤: [快速开始指南](docs/QUICKSTART.md)
-
----
-
-## 📖 文档导航
-
-| 文档 | 说明 |
-|------|------|
-| [快速开始](docs/QUICKSTART.md) | 5分钟部署指南 |
-| [架构设计](docs/ARCHITECTURE.md) | 系统架构详解 |
-| [前端设计](docs/FRONTEND.md) | 页面、功能模块、API交互 |
-| [后端 API](docs/BACKEND.md) | API 接口详细设计 |
-| [技术选型](docs/TECH_STACK.md) | 技术栈和成本分析 |
 
 ---
 
@@ -179,14 +95,6 @@ npm run preview
 | `/api/v1/clone/tasks` | GET/POST | 克隆任务列表/创建 |
 | `/api/v1/clone/results/{id}` | GET | 获取克隆结果 |
 
-### WebSocket 实时推送
-
-```
-ws://host/ws/tasks/{task_id}
-```
-
-实时推送任务进度、状态变化。
-
 ---
 
 ## 💰 成本分析
@@ -199,30 +107,16 @@ ws://host/ws/tasks/{task_id}
 | 音色克隆 | Replicate RVC | ~$0.03 |
 | **合计** | | **~$0.03** |
 
-### 免费额度
-
-| API | 免费额度 |
-|-----|----------|
-| HuggingFace | 无限制 |
-| Replicate | $5 新用户额度 |
-
 ---
 
-## 🔧 技术栈
+## 📁 文档目录
 
-### 前端
-- Vue.js 3 + Vite
-- Element Plus
-- Pinia + Axios
-
-### 后端
-- FastAPI
-- Celery + Redis
-- pydub + Silero VAD
-
-### 外部 API
-- HuggingFace (人声分离)
-- Replicate RVC (音色克隆)
+| 文档 | 说明 |
+|------|------|
+| [架构设计](docs/ARCHITECTURE.md) | 系统架构、数据流、部署架构 |
+| [前端设计](docs/FRONTEND.md) | 页面布局、功能模块、API交互 |
+| [后端 API](docs/BACKEND.md) | API 接口详细设计 |
+| [技术选型](docs/TECH_STACK.md) | 技术栈和成本分析 |
 
 ---
 
@@ -237,6 +131,5 @@ ws://host/ws/tasks/{task_id}
 
 ---
 
-## 📄 License
-
-MIT License
+*当前阶段: 需求设计*
+*最后更新: 2026-03-18*
