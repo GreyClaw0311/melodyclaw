@@ -355,12 +355,17 @@ def align_lyrics(song_id: int, vocals_path: str):
 ```json
 {
   "songId": 1,
-  "voiceId": 2,
-  "pitchShift": 0,
-  "provider": "replicate",
-  "apiKey": "可选的自定义API Key"
+  "voiceId": "voice_pop_male",
+  "pitchShift": 0
 }
 ```
+
+**参数说明**:
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| songId | int | 是 | 源歌曲ID |
+| voiceId | string | 是 | 预设音色ID (如 voice_pop_male) |
+| pitchShift | int | 否 | 音高偏移（半音），默认0 |
 
 **响应示例**:
 ```json
@@ -383,9 +388,10 @@ def align_lyrics(song_id: int, vocals_path: str):
 **处理流程**:
 ```
 1. 验证歌曲已分离人声
-2. 创建任务记录
-3. 加入 Celery 队列
-4. 返回任务 ID
+2. 验证预设音色ID有效
+3. 创建任务记录
+4. 加入 Celery 队列
+5. 返回任务 ID
 ```
 
 **外部 API 调用**: ⚠️ (音色克隆部分)
@@ -439,9 +445,11 @@ def align_lyrics(song_id: int, vocals_path: str):
 
 ---
 
-### 2.4 音色管理 API
+### 2.4 预设音色 API
 
-#### GET /api/v1/voices - 获取音色列表
+#### GET /api/v1/voices/preset - 获取预设音色列表
+
+**说明**: 返回系统内置的预设音色列表，用户无需上传音色模型
 
 **响应示例**:
 ```json
@@ -449,39 +457,72 @@ def align_lyrics(song_id: int, vocals_path: str):
   "code": 200,
   "data": [
     {
-      "id": 1,
+      "id": "voice_pop_male",
       "name": "流行男声",
+      "description": "温暖明亮，适合流行歌曲",
       "category": "pop",
-      "description": "温暖明亮的流行男声",
-      "previewUrl": "/voices/1/preview.mp3",
-      "provider": "replicate",
-      "modelId": "rvc-model-001"
+      "previewUrl": "/static/voices/pop_male_preview.mp3",
+      "modelId": "rvc-pop-male-v1",
+      "suitable": ["流行", "抒情"]
+    },
+    {
+      "id": "voice_pop_female",
+      "name": "流行女声",
+      "description": "清澈甜美，适合流行歌曲",
+      "category": "pop",
+      "previewUrl": "/static/voices/pop_female_preview.mp3",
+      "modelId": "rvc-pop-female-v1",
+      "suitable": ["流行", "抒情"]
+    },
+    {
+      "id": "voice_rock_male",
+      "name": "摇滚男声",
+      "description": "粗犷有力，适合摇滚歌曲",
+      "category": "rock",
+      "previewUrl": "/static/voices/rock_male_preview.mp3",
+      "modelId": "rvc-rock-male-v1",
+      "suitable": ["摇滚", "金属"]
+    },
+    {
+      "id": "voice_ballad",
+      "name": "民谣嗓音",
+      "description": "朴实自然，适合民谣歌曲",
+      "category": "ballad",
+      "previewUrl": "/static/voices/ballad_preview.mp3",
+      "modelId": "rvc-ballad-v1",
+      "suitable": ["民谣", "乡村"]
+    },
+    {
+      "id": "voice_child",
+      "name": "童声",
+      "description": "稚嫩可爱，适合儿童歌曲",
+      "category": "child",
+      "previewUrl": "/static/voices/child_preview.mp3",
+      "modelId": "rvc-child-v1",
+      "suitable": ["儿歌", "童谣"]
+    },
+    {
+      "id": "voice_deep",
+      "name": "低沉嗓音",
+      "description": "浑厚磁性，适合抒情歌曲",
+      "category": "deep",
+      "previewUrl": "/static/voices/deep_preview.mp3",
+      "modelId": "rvc-deep-v1",
+      "suitable": ["抒情", "爵士"]
     }
   ]
 }
 ```
 
-**本地处理**: ✅ 数据库查询
+**本地处理**: ✅ 返回静态配置
 
 ---
 
-#### POST /api/v1/voices - 添加音色
+#### GET /api/v1/voices/{id}/preview - 获取音色试听音频
 
-**请求体**:
-```json
-{
-  "name": "我的音色",
-  "category": "custom",
-  "type": "preset",
-  "presetId": "rvc-voice-001"
-}
-```
+**说明**: 返回预设音色的试听音频文件
 
-**本地处理**: ✅ 数据库写入
-
----
-
-#### GET /api/v1/voices/{id}/preview - 获取试听音频
+**响应**: 音频文件流 (MP3)
 
 **本地处理**: ✅ 返回静态文件
 
